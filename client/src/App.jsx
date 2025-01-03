@@ -11,36 +11,41 @@ const onchange=(e)=>{
 
 }
 useEffect(()=>{
-  socket.on('recivemessage',(data)=>{
-  
-    console.log(data, socket.id)
-    setallmessage([data])
-  })
+  socket.on('recivemessage', (data) => {
+    setallmessage((prevMessages) => [...prevMessages, data]);
+});
+console.log(allmessage)
+  return () => {
+    socket.off('recivemessage'); // Clean up the listener on component unmount
+};
 
 },[])
 const handlesendmessage=(e)=>{
   e.preventDefault()
-  socket.emit("usermessage",usermessage.message)
+  if (usermessage.message.trim() !== "") { // Ensure the message is not empty
+    socket.emit("usermessage", usermessage.message);
+    setusermessage({ message: "" }); // Reset usermessage to an empty object
+}
+
 }
   return (
     <>
     <h1>HII THIS IS A CHAT APP</h1>
     <div style={{display:"flex",gap:"20px",flexDirection:"column", width:"200px"}}>
+    <input name='message' onChange={onchange} type="text" placeholder='Enter your message' value={usermessage.message} />
+   <button onClick={handlesendmessage} type="button">SEND MESSAGE</button>
 
-    <input name='message'  onChange={onchange} type="text" placeholder='Enter your message' value={setusermessage.message} />
-    <button onClick={handlesendmessage} type="button">SEND MESSAGE</button>
     </div>
 
     <div className="allmessage">
-      {allmessage}
-     {allmessage.map((msg,index)=>{
-      <div>
-          <h1>{index}</h1>
-          <h2>{msg}</h2>
-      </div>
-    
-      
-     })}
+      {allmessage.map((data,index)=>{
+
+        return(
+
+         <h1 key={index}>{data}</h1> 
+        )
+      })}
+     
     </div>
     </>
   )
