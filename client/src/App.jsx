@@ -3,14 +3,18 @@ import './App.css'
 import {io} from 'socket.io-client'
 const socket=io("http://localhost:5000")
 function App() {
-const [usermessage,setusermessage]= useState({message:""})
+const [usermessage,setusermessage]= useState({message:"",username:""})
 const [allmessage,setallmessage]= useState([])
+
 const onchange=(e)=>{
   e.preventDefault();
   setusermessage({...usermessage,[e.target.name]:e.target.value})
 
 }
 useEffect(()=>{
+  const name= prompt("Enter your name")
+  setusermessage({username:name})
+  console.log(usermessage.username)
   socket.on('recivemessage', (data) => {
     setallmessage((prevMessages) => [...prevMessages, data]);
 });
@@ -23,7 +27,7 @@ console.log(allmessage)
 const handlesendmessage=(e)=>{
   e.preventDefault()
   if (usermessage.message.trim() !== "") { // Ensure the message is not empty
-    socket.emit("usermessage", usermessage.message);
+    socket.emit("usermessage", usermessage.message,usermessage.username);
     setusermessage({ message: "" }); // Reset usermessage to an empty object
 }
 
