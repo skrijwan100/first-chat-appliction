@@ -19,10 +19,11 @@ app.get("/",(req,res)=>{
     res.send("hiiiiiiiiiii")
 })
 
-io.on('connection',(scoket)=>{
-    console.log('a new user connected', scoket.id)
-    scoket.on("usermessage",(data)=>{
+io.on('connection',(socket)=>{
+    console.log('a new user connected', socket.id)
+    socket.on("usermessage",(data)=>{
       io.emit("recivemessage",data)
+      console.log(data)
     })
 })
 
