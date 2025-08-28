@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Phone, Video, MoreHorizontal, Search, Smile, Paperclip, Users } from 'lucide-react';
+import { Send, Phone, Video, MoreHorizontal, } from 'lucide-react';
 import { io } from 'socket.io-client'
-
+import logo from "../assets/logo1.png"
 const ChatRoom = () => {
      const socket = useRef(io("http://localhost:5000")).current;
     const [Umessage, setUMessage] = useState('');
@@ -12,27 +12,32 @@ const ChatRoom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
+     useEffect(() => {
+        socket.on('recivemessage', (data) => {
+            console.log('Received:', data);
+            setMessages((prev) => [...prev, data]);
+        });
+
+        // Cleanup function to remove listener when component unmounts
+        return () => {
+            socket.off('recivemessage');
+        };
+    }, []); // Empty dependency array - runs only once
+
+    // Separate useEffect for scrolling (runs when messages change)
     useEffect(() => {
         scrollToBottom();
-        socket.on('recivemessage', (data) => {
-            console.log(data)
-             setMessages((prev) => [...prev, data]);
-        });
-        console.log(messages)
-        return () => socket.off('recivemessage');
-    }, []);
+    }, [messages]);
+
 
     const sendMessage = () => {
-        if (Umessage.trim()) {
+        if (Umessage.trim() !=='') {
             const newMsg = {
-                message: Umessage,
-                isMe: true,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                 message:Umessage,
+                 isMe:false,
+                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
-
-            socket.emit("usermessage", newMsg);
-            console.log(newMsg)
-            // setMessages((prev) => [...prev, newMsg]); // show immediately
+            socket.emit("usermessage",newMsg);
             setUMessage(''); // ✅ reset string input
         }
     };
@@ -51,8 +56,8 @@ const ChatRoom = () => {
                 <div className="bg-black/20 backdrop-blur-xl border-b border-white/10 p-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                                <Users className="w-5 h-5 text-white" />
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r flex items-center justify-center">
+                                <img src={logo} alt='This is logo' className="w-8 h-8 text-white" />
                             </div>
                             <div>
                                 <h2 className="text-white font-semibold">DevChat Room</h2>

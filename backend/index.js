@@ -23,6 +23,7 @@ io.on('connection',(socket)=>{
     console.log('a new user connected', socket.id)
     socket.on("usermessage",(data)=>{
       io.emit("recivemessage",data)
+    //    socket.broadcast.emit('recivemessage', data);
       console.log(data)
     })
 })
