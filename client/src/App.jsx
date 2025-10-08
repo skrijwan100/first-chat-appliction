@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import ChatRoom from './components/chatRoom'
+import DevChatHomePage from './components/GenarateRoom'
 function App() {
 
   
   return (
     <>
-      <ChatRoom/>
+    <DevChatHomePage/>
+      {/* <ChatRoom/> */}
     </>
   )
 }
