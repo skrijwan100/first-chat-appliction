@@ -7,7 +7,10 @@ const cors= require('cors')
 const { Socket } = require('dgram')
 require('dotenv').config()
 const PORT = process.env.PORT;
+const serverdb= require("./db")
+serverdb()
 app.use(cors())
+app.use(express.json())
 const io = new Server(server,{
     cors:{
         origin:'http://localhost:5173',
@@ -26,7 +29,7 @@ io.on('connection',(socket)=>{
       console.log(data)
     })
 })
-
+app.use("/api/v1/roomwork",require("./routes/roomWork"))
 server.listen(PORT ,()=>{
     console.log(`The app run in the ${PORT}`)
     console.log(process.env.FRONTEND_ORIGIN)

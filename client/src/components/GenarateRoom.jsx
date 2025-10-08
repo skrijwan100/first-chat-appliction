@@ -80,22 +80,41 @@ export default function DevChatHomePage() {
         }
     };
 
-    const joinRoom = () => {
+    const joinRoom = async() => {
         if (!joinRoomId.trim()) {
             alert('Please enter a room ID');
             return;
         }
+        const url = `${import.meta.env.VITE_BACKEND_URL}/api/v1/roomwork/findroom`
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({RoomId: joinRoomId })
+        })
+        const data = await res.json()
+        console.log(data)
 
-        console.log('Joining room:', { roomId: joinRoomId, userName });
-        alert(`Connecting to room ${joinRoomId} as ${userName}...`);
         closeJoinModal();
     };
 
-    const closeGenerateModal = () => {
+    const closeGenerateModal = async () => {
         setShowGenerateModal(false);
         setShowGeneratedId(false);
         setRoomName('');
+        console.log(generatedRoomId)
+        const url = `${import.meta.env.VITE_BACKEND_URL}/api/v1/roomwork/addroom`
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ generatedRoomId: generatedRoomId })
+        })
+        const data = await res.json()
         setGeneratedRoomId('');
+        console.log(data)
     };
 
     const closeJoinModal = () => {
