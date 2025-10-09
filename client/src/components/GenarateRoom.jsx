@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { handleError, handleSuccess } from './Alertmessage';
 
 export default function DevChatHomePage() {
     const [showGenerateModal, setShowGenerateModal] = useState(false);
@@ -9,6 +10,7 @@ export default function DevChatHomePage() {
     const [userName, setUserName] = useState('');
     const [showGeneratedId, setShowGeneratedId] = useState(false);
     const [copySuccess, setCopySuccess] = useState(false);
+    const [loder,setloder]=useState(false)
 
     // Create floating particles
     useEffect(() => {
@@ -85,6 +87,7 @@ export default function DevChatHomePage() {
             alert('Please enter a room ID');
             return;
         }
+        setloder(true)
         const url = `${import.meta.env.VITE_BACKEND_URL}/api/v1/roomwork/findroom`
         const res = await fetch(url, {
             method: 'POST',
@@ -95,14 +98,16 @@ export default function DevChatHomePage() {
         })
         const data = await res.json()
         console.log(data)
-
+        if(!data.status){
+            setloder(false)
+            return handleError("Not found any room.")
+        }
+        setloder(false)
         closeJoinModal();
     };
 
     const closeGenerateModal = async () => {
-        setShowGenerateModal(false);
-        setShowGeneratedId(false);
-        setRoomName('');
+        setloder(true)
         console.log(generatedRoomId)
         const url = `${import.meta.env.VITE_BACKEND_URL}/api/v1/roomwork/addroom`
         const res = await fetch(url, {
@@ -113,8 +118,13 @@ export default function DevChatHomePage() {
             body: JSON.stringify({ generatedRoomId: generatedRoomId })
         })
         const data = await res.json()
-        setGeneratedRoomId('');
         console.log(data)
+        setloder(false)
+        setGeneratedRoomId('');
+        setShowGenerateModal(false);
+        setShowGeneratedId(false);
+        setRoomName('');
+        handleSuccess("Room is created")
     };
 
     const closeJoinModal = () => {
@@ -297,7 +307,7 @@ export default function DevChatHomePage() {
                                             onClick={closeGenerateModal}
                                             className="flex-1 py-4 px-8 rounded-xl text-white font-semibold bg-white/10 border border-white/20 hover:bg-white/20 transition-all"
                                         >
-                                            Done
+                                            {loder?<div className='loder'></div>:'Done'}
                                         </button>
                                     </div>
                                 </>
@@ -336,7 +346,7 @@ export default function DevChatHomePage() {
                                         boxShadow: '0 10px 20px rgba(139, 92, 246, 0.3)'
                                     }}
                                 >
-                                    Join Room
+                                    {loder?<div className='loder'></div>:'Join Room'}
                                 </button>
                                 <button
                                     onClick={closeJoinModal}
