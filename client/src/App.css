@@ -1,15 +1,24 @@
-.loder {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  border: 4px solid rgba(255,255,255,0.3);
-  border-top: 4px solid #a21caf; /* purple-700 */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto;
-  vertical-align: middle;
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+     body {
+       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+       overflow-x: hidden;
+     }
 
+     .loder {
+       display: inline-block;
+       width: 28px;
+       height: 28px;
+       border: 4px solid rgba(255, 255, 255, 0.3);
+       border-top: 4px solid #a21caf;
+       /* purple-700 */
+       border-radius: 50%;
+       animation: spin 1s linear infinite;
+       margin: 0 auto;
+       vertical-align: middle;
+     }
+
+     @keyframes spin {
+       to {
+         transform: rotate(360deg);
+       }
+     }

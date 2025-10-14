@@ -3,14 +3,24 @@ import './App.css'
 import ChatRoom from './components/chatRoom'
 import DevChatHomePage from './components/GenarateRoom'
 import { ToastContainer } from 'react-toastify'
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 function App() {
 
 
   return (
     <>
+    <BrowserRouter>
       <ToastContainer />
-      <DevChatHomePage />
-      {/* <ChatRoom/> */}
+    <Routes>
+      <Route path='/' element={<DevChatHomePage />}/>
+      <Route path='/:id' element={<ChatRoom/>}/>
+    </Routes>
+    </BrowserRouter>
+      
     </>
   )
 }

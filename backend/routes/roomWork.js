@@ -20,6 +20,10 @@ router.post("/findroom",async(req,res)=>{
     try {
         const {RoomId}=req.body;
         const roomdata= await Room.findOne({RoomId:RoomId})
+        if(!roomdata){
+
+            return res.status(200).json({ "message": "Not Found","status": false  })
+        }
         return res.status(200).json({ "message": roomdata,"status": true  })
         
     } catch (error) {

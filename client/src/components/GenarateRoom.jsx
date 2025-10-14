@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { handleError, handleSuccess } from './Alertmessage';
+import { useNavigate } from 'react-router';
 
 export default function DevChatHomePage() {
     const [showGenerateModal, setShowGenerateModal] = useState(false);
@@ -11,6 +12,7 @@ export default function DevChatHomePage() {
     const [showGeneratedId, setShowGeneratedId] = useState(false);
     const [copySuccess, setCopySuccess] = useState(false);
     const [loder,setloder]=useState(false)
+    const naviget=useNavigate()
 
     // Create floating particles
     useEffect(() => {
@@ -104,6 +106,7 @@ export default function DevChatHomePage() {
         }
         setloder(false)
         closeJoinModal();
+        naviget(`/${joinRoomId}`)
     };
 
     const closeGenerateModal = async () => {
@@ -148,13 +151,6 @@ export default function DevChatHomePage() {
 
     return (
         <>
-            <style jsx global>{`
-        body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-          overflow-x: hidden;
-        }
-      `}</style>
 
             <div className="min-h-screen relative text-white">
                 {/* Background Decoration */}
